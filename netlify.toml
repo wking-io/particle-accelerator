@@ -1,0 +1,13 @@
+[build]
+  publish = "dist"
+  command = "yarn build:prod"
+
+[context.dev]
+    publish = "build"
+    command = "yarn build:dev"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = true
