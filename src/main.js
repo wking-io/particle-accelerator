@@ -63,7 +63,7 @@ function getValue(ctx, shape) {
 var message = shape(
   canvas.width,
   canvas.height,
-  "You're going to be grandparents!"
+  "You're going to be babysitters... Oh wait, grandparents."
 );
 
 const mountNode = document.getElementById('app');
