@@ -99,7 +99,7 @@ initParticleAt ( x, y ) =
     , radius = 1
     , maxRadius = 5
     , color = Color.blue
-    , speed = 0
+    , speed = 10
     , gravity = 0
     , duration = 0.4
     , friction = 0.99
@@ -127,7 +127,7 @@ view model =
             Canvas.element
                 canvas.width
                 canvas.height
-                [ Attributes.style [] ]
+                [ Attributes.style [ ( "background-image", "linear-gradient(135deg, #38BAA0, #D5ED9A)" ) ] ]
                 [ Canvas.clearRect 0 0 (toFloat canvas.width) (toFloat canvas.height)
                 , Canvas.batch (List.map viewParticle particles)
                 ]
@@ -136,8 +136,8 @@ view model =
 viewParticle : Particle -> Canvas.Command
 viewParticle { cx, cy, radius, color } =
     Canvas.batch
-        [ Canvas.fillStyle color
-        , Canvas.fillCircle cx cy radius
+        [ Canvas.strokeStyle (Color.white)
+        , Canvas.strokeCircle cx cy radius
         ]
 
 
