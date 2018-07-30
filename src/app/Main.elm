@@ -1,14 +1,14 @@
 module Main exposing (main)
 
 import AnimationFrame
+import Canvas
 import Color exposing (Color)
 import Color.Convert exposing (colorToHex)
 import Html exposing (Html)
+import Html.Attributes as Attributes
 import Json.Decode as Decode exposing (Decoder, Value)
 import Process
 import Random exposing (Generator, Seed)
-import Svg exposing (Svg)
-import Svg.Attributes as SA
 import Task
 import Time exposing (Time)
 
@@ -80,15 +80,9 @@ init json =
             Decode.decodeValue flagDecoder json
                 |> Result.withDefault ( { width = 0, height = 0 }, [] )
 
-        _ =
-            Debug.log "nb points" (List.length points)
-
         ( particles, seed ) =
             List.map initParticleAt points
                 |> updateAllParticles (updateParticle True canvas) (Random.initialSeed 0)
-
-        _ =
-            Debug.log "nb particles" (List.length particles)
     in
         ( Running seed canvas particles
         , stopAfter (30 * Time.second)
@@ -130,23 +124,21 @@ view model =
             Html.text "Automatically stopped"
 
         Running seed canvas particles ->
-            Svg.svg
-                [ SA.width (toString canvas.width)
-                , SA.height (toString canvas.height)
-                , SA.viewBox (String.join " " [ "0", "0", toString canvas.width, toString canvas.height ])
+            Canvas.element
+                canvas.width
+                canvas.height
+                [ Attributes.style [] ]
+                [ Canvas.clearRect 0 0 (toFloat canvas.width) (toFloat canvas.height)
+                , Canvas.batch (List.map viewParticle particles)
                 ]
-                (List.map viewParticle particles)
 
 
-viewParticle : Particle -> Svg Msg
+viewParticle : Particle -> Canvas.Command
 viewParticle { cx, cy, radius, color } =
-    Svg.circle
-        [ SA.fill (colorToHex color)
-        , SA.cx (toString cx)
-        , SA.cy (toString cy)
-        , SA.r (toString radius)
+    Canvas.batch
+        [ Canvas.fillStyle color
+        , Canvas.fillCircle cx cy radius
         ]
-        []
 
 
 
@@ -332,9 +324,6 @@ updateSpeed particle =
     let
         heading =
             atan2 particle.vx particle.vy
-
-        _ =
-            Debug.log "speed" particle.speed
     in
         { particle
             | vx = cos heading * particle.speed
