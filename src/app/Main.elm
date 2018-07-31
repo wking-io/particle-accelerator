@@ -78,7 +78,7 @@ init json =
 
         ( particles, seed ) =
             List.map initParticleAt points
-                |> updateAllParticles (updateParticle True 10 canvas) (Random.initialSeed 0)
+                |> updateAllParticles (updateParticle True ( 4, 0.05 ) canvas) (Random.initialSeed 0)
     in
         ( Running 0 seed canvas particles
         , Cmd.none
@@ -95,9 +95,9 @@ initParticleAt ( x, y ) =
     , radius = 1
     , maxRadius = 6
     , color = Color.blue
-    , speed = 0
+    , speed = 4
     , gravity = 0
-    , duration = 0.2
+    , duration = 0.05
     , friction = 0.99
     , dying = False
     , rotation = 0
@@ -156,8 +156,8 @@ update msg model =
                 forceReset =
                     False
 
-                speed =
-                    getSpeedFromTimeline 10000 initTime currentTime
+                timeline =
+                    getTimeline 10000 initTime currentTime
 
                 time =
                     if initTime == 0 then
@@ -166,41 +166,29 @@ update msg model =
                         initTime
 
                 ( newParticles, newSeed ) =
-                    updateAllParticles (updateParticle False speed canvas) seed particles
+                    updateAllParticles (updateParticle False timeline canvas) seed particles
             in
                 ( Running time newSeed canvas newParticles, Cmd.none )
 
 
-getSpeedFromTimeline : Float -> Time -> Time -> Float
-getSpeedFromTimeline delay initTime currentTime =
+getTimeline : Float -> Time -> Time -> ( Float, Float )
+getTimeline delay initTime currentTime =
     let
         diff =
             (Time.inMilliseconds currentTime) - (Time.inMilliseconds initTime)
     in
         if initTime == 0 then
-            10
-        else if diff > (delay + 1000) then
-            0
-        else if diff > (delay + 900) then
-            1
-        else if diff > (delay + 800) then
-            2
-        else if diff > (delay + 700) then
-            3
-        else if diff > (delay + 600) then
-            4
-        else if diff > (delay + 500) then
-            5
+            ( 4, 0.05 )
+        else if diff > (delay + 450) then
+            ( 0, 0.25 )
         else if diff > (delay + 400) then
-            6
+            ( 1, 0.2 )
         else if diff > (delay + 300) then
-            7
+            ( 2, 0.15 )
         else if diff > (delay + 200) then
-            8
-        else if diff > (delay + 100) then
-            9
+            ( 3, 0.1 )
         else
-            20
+            ( 4, 0.05 )
 
 
 updateAllParticles : (Seed -> Particle -> ( Particle, Seed )) -> Seed -> List Particle -> ( List Particle, Seed )
@@ -217,11 +205,11 @@ stepAccum step particle ( list, seed ) =
         ( newParticle :: list, newSeed )
 
 
-updateParticle : Bool -> Float -> Canvas -> Seed -> Particle -> ( Particle, Seed )
-updateParticle forceReset speed canvas seed particle =
+updateParticle : Bool -> ( Float, Float ) -> Canvas -> Seed -> Particle -> ( Particle, Seed )
+updateParticle forceReset ( speed, duration ) canvas seed particle =
     if forceReset || particle.radius < 1 then
         Random.step particleVariablesGenerator seed
-            |> Tuple.mapFirst (resetParticle speed particle)
+            |> Tuple.mapFirst (resetParticle speed duration particle)
     else
         let
             radiusGrowth =
@@ -242,13 +230,14 @@ updateParticle forceReset speed canvas seed particle =
                 , dying = particle.dying || newRadius > particle.maxRadius
                 , rotation = particle.rotation + 2
                 , speed = speed
+                , duration = duration
               }
             , seed
             )
 
 
-resetParticle : Float -> Particle -> ParticleVariables -> Particle
-resetParticle speed particle ( maxRadius, color, angle ) =
+resetParticle : Float -> Float -> Particle -> ParticleVariables -> Particle
+resetParticle speed duration particle ( maxRadius, color, angle ) =
     updateVelocity angle
         { particle
             | maxRadius = maxRadius
@@ -257,6 +246,7 @@ resetParticle speed particle ( maxRadius, color, angle ) =
             , dying = False
             , rotation = angle
             , speed = speed
+            , duration = duration
             , cx = Tuple.first particle.origin
             , cy = Tuple.second particle.origin
         }
