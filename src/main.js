@@ -3,9 +3,9 @@ import './main.scss';
 
 function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
   return text
-    .split(" ")
+    .split(' ')
     .reduce((lines, word) => {
-      var line = lines.pop() || "";
+      var line = lines.pop() || '';
       var testLine = `${line} ${word}`;
       var { width } = ctx.measureText(testLine);
       return width > maxWidth ? [...lines, line, word] : [...lines, testLine];
@@ -30,7 +30,7 @@ function shape(width, height, text) {
     text,
     frequency: 5,
     x: width / 2,
-    y: height / 2 - 20,
+    y: height / 2 - 80,
     size: 120,
     maxWidth: Math.round(width * 0.8),
     maxHeight: Math.round(height * 0.8),
