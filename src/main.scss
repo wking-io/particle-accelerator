@@ -1,37 +1,32 @@
-$primary: #3bc9db;
-$primary-dark: #0b7285;
-$neutral-xlight: #f1f3f5;
-$neutral-light: #ced4da;
-$neutral-medium: #868e96;
-$neutral-dark: #495057;
-
-$white: #fff;
-$black: $neutral-dark;
-
-$sans-font: 'Roboto', sans-serif;
-$serif-font: 'Roboto Slab', $sans-font;
-
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-}
-
 html,
 body {
   margin: 0;
   padding: 0;
-  font-family: $sans-font;
-}
-
-html {
-  font-size: 4px;
+  width: 100vw;
+  height: 100vh;
 }
 
 body {
-  font-size: 4rem;
+  background: linear-gradient(to right, #5433ff, #20bdff, #a5fecb);
 }
 
-#canvas {
-  position: absolute;
+#start {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.btn {
+  z-index: 9999;
+  background: transparent;
+  border: 1px solid #fff;
+  color: #fff;
+  font-family: 'fira sans', 'helvetica', arial, sans-serif;
+  font-size: 14px;
+  padding: 0.5em 1.5em;
+  margin: 0 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
 }

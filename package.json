@@ -6,7 +6,7 @@
   "author": "William King <contactg@wking.io>",
   "license": "MIT",
   "scripts": {
-    "build:dev": "webpack-serve --env.NODE_ENV=development --mode development --hot --open",
+    "build:dev": "parcel src/index.html -p 1234",
     "build:prod": "webpack --env.NODE_ENV=production --mode production && yarn copy-redirects",
     "copy-redirects": "cp _redirects dist/",
     "start": "webpack-dashboard -c magenta -- webpack-serve --env.NODE_ENV=development --mode development --hot --open --port 4000"
@@ -15,6 +15,7 @@
     "autoprefixer": "8.5.1",
     "babel-core": "6.26.3",
     "babel-loader": "7.1.4",
+    "babel-plugin-transform-object-rest-spread": "6.26.0",
     "babel-preset-env": "1.7.0",
     "clean-webpack-plugin": "0.1.19",
     "css-loader": "0.28.11",
@@ -25,6 +26,7 @@
     "html-webpack-plugin": "3.2.0",
     "mini-css-extract-plugin": "0.4.0",
     "node-sass": "4.9.0",
+    "parcel": "1.9.7",
     "postcss-clean": "1.1.0",
     "postcss-loader": "2.1.5",
     "sass-loader": "7.0.1",
