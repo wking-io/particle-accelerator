@@ -28,20 +28,20 @@ function shape(width, height, text) {
     width,
     height,
     text,
-    frequency: 5,
+    frequency: 6,
     x: width / 2,
     y: height / 2 - 80,
-    size: 120,
+    size: 100,
     maxWidth: Math.round(width * 0.8),
     maxHeight: Math.round(height * 0.8),
-    lineHeight: 132,
+    lineHeight: 112,
     points: [],
   };
 }
 
 function getValue(ctx, shape) {
   ctx.textAlign = 'center';
-  ctx.font = 'bold ' + shape.size + 'px arial';
+  ctx.font = 'normal ' + shape.size + 'px "Oswald"';
   wrapText(ctx, shape.text, shape.x, shape.y, shape.maxWidth, shape.lineHeight);
   var idata = ctx.getImageData(0, 0, shape.width, shape.height);
   var buffer32 = new Uint32Array(idata.data.buffer);
@@ -59,7 +59,7 @@ function getValue(ctx, shape) {
 var message = shape(
   canvas.width,
   canvas.height,
-  "You're going to be babysitters... Oh wait, grandparents."
+  "You're going to be babysi...Oh wait, I mean grandparents."
 );
 
 const mountNode = document.getElementById('app');

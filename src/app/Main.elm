@@ -115,7 +115,7 @@ view model =
             Canvas.element
                 canvas.width
                 canvas.height
-                [ Attributes.style [ ( "background-image", "linear-gradient(135deg, #38BAA0, #D5ED9A)" ) ] ]
+                [ Attributes.style [ ( "background-image", "linear-gradient(135deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(135deg, #38BAA0, #D5ED9A)" ) ] ]
                 [ Canvas.clearRect 0 0 (toFloat canvas.width) (toFloat canvas.height)
                 , Canvas.batch (List.map viewParticle particles)
                 ]
