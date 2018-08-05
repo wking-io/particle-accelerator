@@ -93,9 +93,9 @@ function shape(width, height, text) {
     width,
     height,
     text,
-    frequency: 5,
+    frequency: 6,
     x: width / 2,
-    y: height / 2,
+    y: height / 2 + 20,
     size: 140,
     lineHeight: 152,
     maxWidth: Math.round(width * 0.8),
@@ -282,6 +282,7 @@ function theBigReveal(e) {
     { speed: 0, duration: 0.6 },
   ];
   update(ctx, getValue(ctx, message), 0, steps)(0);
+  e.target.classList.add('disappear');
   setTimeout(() => {
     e.target.style.display = 'none';
     canvas.style.display = 'block';
