@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "parcel src/index.html -p 1234",
-    "build": "parcel build src/index.html",
+    "build": "parcel build src/index.html && yarn copy-redirects",
     "copy-redirects": "cp _redirects dist/"
   },
   "devDependencies": {
